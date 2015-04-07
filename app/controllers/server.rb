@@ -19,7 +19,6 @@ module TrafficSpy
     end
     
     post '/sources/:identifier/data' do |identifier|
-      # payload = Payload.new(url: params["payload"["url
       payload = Payload.create(url_id: Url.find_or_create_by(address: params["payload"]["url"]).id,
                                requested_at: params["payload"]["requestedAt"], 
                                responded_in: params["payload"]["respondedIn"], 
