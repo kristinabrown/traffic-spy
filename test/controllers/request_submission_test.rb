@@ -8,7 +8,7 @@ class RequestSubmissionTest < MiniTest::Test
   end
 
   def test_a_request_can_be_submitted_with_all_fields
-    post '/sources', { source: {identifier: "jumpstartlab", root_url: "http://jumpstartlab.com"}}
+    post '/sources', 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'
     s = Source.last
   
     assert_equal "jumpstartlab", s.identifier
@@ -20,7 +20,7 @@ class RequestSubmissionTest < MiniTest::Test
   
   def test_400_error_when_identifier_is_empty
     original_count = Source.count
-    post '/sources', { source: {root_url: "http://jumpstartlab.com"}}
+    post '/sources', 'rootUrl=http://jumpstartlab.com'
     
     assert_equal original_count, Source.count
     
@@ -30,7 +30,7 @@ class RequestSubmissionTest < MiniTest::Test
   
   def test_400_error_when_root_url_is_empty
     original_count = Source.count
-    post '/sources', { source: {identifier: "jumpstartlabs"}}
+    post '/sources', 'identifier=jumpstartlab'
     
     assert_equal original_count, Source.count
     
@@ -39,9 +39,9 @@ class RequestSubmissionTest < MiniTest::Test
   end
   
   def test_403_error_when_the_identifier_already_exists
-    post '/sources', { source: {identifier: "jumpstartlab", root_url: "http://jumpstartlab.com"}}
+    post '/sources', 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'
     original_count = Source.count
-    post '/sources', { source: {identifier: "jumpstartlab", root_url: "http://jumpstartlab.com"}}
+    post '/sources', 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'
     
     assert_equal original_count, Source.count
     
