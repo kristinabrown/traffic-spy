@@ -4,9 +4,8 @@ class CreatePayload
   end
 
   def status
-    if @payload == {}
-      400
-    elsif @payload.save
+    if Payload.where(url_id: @payload.url_id, requested_at: @payload.requested_at, user_agent_id: @payload.user_agent_id) == [] 
+      @payload.save
       200
     else
       403
@@ -14,26 +13,18 @@ class CreatePayload
   end
 
   def body
-    if @payload.save
-      #"{'identifier':'#{@payload[:identifier]}'}"
+    if  Payload.where(url_id: @payload.url_id, requested_at: @payload.requested_at, user_agent_id: @payload.user_agent_id) == [] 
+      "success"
     else
-      @payload.errors.full_messages
+      "Duplicate payload request"
     end
   end
+  
+  def missing_identifier_status
+    403
+  end
+  
+  def missing_identifier_body
+    "Identifier doesn't exist"
+  end
 end
-
-# Missing Payload - 400 Bad Request
-#
-# If the payload is missing return status 400 Bad Request with a descriptive error message.
-#
-# Already Received Request - 403 Forbidden
-#
-# If the request payload has already been received return status 403 Forbidden with a descriptive error message.
-#
-# Application Not Registered - 403 Forbidden
-#
-# When data is submitted to an application URL that does not exist, return a 403 Forbidden with a descriptive error message.
-#
-# Success - 200 OK
-#
-# When the request contains a unique payload return status 200 OK
