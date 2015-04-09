@@ -44,7 +44,7 @@ module TrafficSpy
 
     def new_payload(parsed_params, identifier)
       Payload.new(source_id:       Source.find_by(identifier: identifier).id,
-                  url_id:          Url.find_or_create_by(address: parsed_params["url"]).id,
+                  url_id:          Url.find_or_create_by(address: parsed_params["url"], relative_path: URI(parsed_params["url"]).path).id,
                   requested_at:    parsed_params["requestedAt"],
                   responded_in:    parsed_params["respondedIn"],
                   referrer_id:     Referrer.find_or_create_by(referrer_url: parsed_params["referredBy"]).id,

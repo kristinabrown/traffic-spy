@@ -25,5 +25,13 @@ module TrafficSpy
       
       erb :client_page
     end
+    
+    get '/sources/:identifier/urls/:relative' do |identifier, relative|
+      byebug
+      @url = Source.find_by(identifier: identifier).payloads.where()
+      @identifier = identifier
+      
+      erb :url_info
+    end
   end
 end

@@ -8,7 +8,7 @@ class SourceTest < Minitest::Test
 
     TestData.payloads.each do |params|
       TrafficSpy::Payload.create(source_id: params["source_id"], 
-                      url_id: TrafficSpy::Url.find_or_create_by(address: params["url"]).id,
+                      url_id: TrafficSpy::Url.find_or_create_by(address: params["url"], relative_path: URI(params["url"]).path).id,
                       requested_at: params["requestedAt"],
                       responded_in: params["respondedIn"],
                       referrer_id: TrafficSpy::Referrer.find_or_create_by(referrer_url: params["referredBy"]).id,
@@ -24,6 +24,11 @@ class SourceTest < Minitest::Test
   
   def teardown
     DatabaseCleaner.clean
+  end
+  
+  def test_it_has_its_attributes
+    assert_equal "http://yahoo.com/weather", @source.payloads.first.url.address
+    assert_equal "/weather", @source.payloads.first.url.relative_path
   end
   
   def test_it_can_find_its_average_response_time
@@ -49,5 +54,4 @@ class SourceTest < Minitest::Test
   def test_it_can_find_most_popular_user_agents
     assert_equal ["Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17: 2", "Mozilla/5.0 (Windows%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17: 1"], @source.payloads.first.url.most_popular_user_agents
   end
-  
 end
