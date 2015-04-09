@@ -19,9 +19,9 @@ class ReceivesPayloadDataTest < MiniTest::Test
     post '/sources', 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'
     post '/sources/jumpstartlab/data', sample_payload
   
-    payload = Payload.last
+    payload = TrafficSpy::Payload.last
     assert_equal 200, last_response.status
-    assert_equal 1, Payload.count
+    assert_equal 1, TrafficSpy::Payload.count
     assert_equal 1, payload.url_id
     assert_equal 1, payload.event_id
     assert_equal 1, payload.referrer_id
@@ -31,20 +31,20 @@ class ReceivesPayloadDataTest < MiniTest::Test
   end
   
   def test_missing_payload_empty_hash_gives_400_error
-    original_count = Payload.count
+    original_count = TrafficSpy::Payload.count
     post '/sources/:identifier/data', {}
   
-    assert_equal original_count, Payload.count
+    assert_equal original_count, TrafficSpy::Payload.count
   
     assert_equal 400, last_response.status
     assert_equal "Missing payload", last_response.body
   end
   
   def test_missing_totally_blank_payload_gives_400_error
-    original_count = Payload.count
+    original_count = TrafficSpy::Payload.count
     post '/sources/:identifier/data', nil
   
-    assert_equal original_count, Payload.count
+    assert_equal original_count, TrafficSpy::Payload.count
   
     assert_equal 400, last_response.status
     assert_equal "Missing payload", last_response.body
@@ -54,12 +54,12 @@ class ReceivesPayloadDataTest < MiniTest::Test
     post '/sources', 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'
     post '/sources/jumpstartlab/data', sample_payload
     
-    original_count = Payload.count
+    original_count = TrafficSpy::Payload.count
     assert_equal 200, last_response.status
   
     post '/sources/jumpstartlab/data', sample_payload
   
-      assert_equal original_count, Payload.count
+      assert_equal original_count, TrafficSpy::Payload.count
       assert_equal 403, last_response.status
       assert_equal "Duplicate payload request", last_response.body
   end
