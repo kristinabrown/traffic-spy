@@ -7,21 +7,17 @@ class ReceivesPayloadDataTest < MiniTest::Test
     TrafficSpy::Server
   end
   
+  def sample_data
+    {"url"=>"http://jumpstartlab.com/blog", "requestedAt"=>"2013-02-16 21:38:28 -0700", "respondedIn"=>37, "referredBy"=>"http://jumpstartlab.com", "requestType"=>"GET", "parameters"=>[], "eventName"=>"socialLogin", "userAgent"=>"Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17", "resolutionWidth"=>"1920", "resolutionHeight"=>"1280", "ip"=>"63.29.38.211"}
+  end
+  
+  def sample_payload
+    {"payload" => sample_data.to_json}
+  end
+  
   def test_it_can_receive_and_save_payload_data
     post '/sources', 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'
-    post '/sources/jumpstartlab/data', { payload: {
-                url:"http://jumpstartlab.com/blog",
-                requestedAt:"2013-02-16 21:38:28 -0700",
-                respondedIn:37,
-                referredBy:"http://jumpstartlab.com",
-                requestType:"GET",
-                parameters:[],
-                eventName: "socialLogin",
-                userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-                resolutionWidth:"1920",
-                resolutionHeight:"1280",
-                ip:"63.29.38.211"
-                }}
+    post '/sources/jumpstartlab/data', sample_payload
   
     payload = Payload.last
     assert_equal 200, last_response.status
@@ -56,55 +52,20 @@ class ReceivesPayloadDataTest < MiniTest::Test
   
   def test_duplicate_request_returns_403_error
     post '/sources', 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'
-    post '/sources/jumpstartlab/data', { payload: {
-                url:"http://jumpstartlab.com/blog",
-                requestedAt:"2013-02-16 21:38:28 -0700",
-                respondedIn:37,
-                referredBy:"http://jumpstartlab.com",
-                requestType:"GET",
-                parameters:[],
-                eventName: "socialLogin",
-                userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-                resolutionWidth:"1920",
-                resolutionHeight:"1280",
-                ip:"63.29.38.211"
-                }}
+    post '/sources/jumpstartlab/data', sample_payload
+    
     original_count = Payload.count
     assert_equal 200, last_response.status
-
-    post '/sources/jumpstartlab/data', { payload: {
-                url:"http://jumpstartlab.com/blog",
-                requestedAt:"2013-02-16 21:38:28 -0700",
-                respondedIn:38,
-                referredBy:"http://jumpstartlab.com",
-                requestType:"GET",
-                parameters:[],
-                eventName: "socialLogin",
-                userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-                resolutionWidth:"1920",
-                resolutionHeight:"1280",
-                ip:"63.29.38.211"
-                }}
-
+  
+    post '/sources/jumpstartlab/data', sample_payload
+  
       assert_equal original_count, Payload.count
       assert_equal 403, last_response.status
       assert_equal "Duplicate payload request", last_response.body
   end
   
   def test_application_not_registered_returns_403_error
-    post '/sources/google/data', { payload: {
-                url:"http://jumpstartlab.com/blog",
-                requestedAt:"2013-02-16 21:38:28 -0700",
-                respondedIn:37,
-                referredBy:"http://jumpstartlab.com",
-                requestType:"GET",
-                parameters:[],
-                eventName: "socialLogin",
-                userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-                resolutionWidth:"1920",
-                resolutionHeight:"1280",
-                ip:"63.29.38.211"
-                }}
+    post '/sources/google/data', sample_payload
                 
     assert_equal 403, last_response.status
     assert_equal "Identifier doesn't exist", last_response.body

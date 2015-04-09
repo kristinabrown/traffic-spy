@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150407223348) do
+ActiveRecord::Schema.define(version: 20150409041529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20150407223348) do
     t.string  "parameters"
     t.integer "event_id"
     t.integer "user_agent_id"
-    t.integer "resolution_size_id"
+    t.integer "resolution_id"
     t.integer "ip_id"
     t.integer "url_id"
   end

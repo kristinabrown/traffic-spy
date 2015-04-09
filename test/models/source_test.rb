@@ -23,7 +23,7 @@ class SourceTest < Minitest::Test
                       parameters: params["parameters"],
                       event_id: Event.find_or_create_by(name: params["eventName"]).id,
                       user_agent_id: UserAgent.find_or_create_by(browser_info: params["userAgent"]).id,
-                      resolution_size_id: Resolution.find_or_create_by(width: params["resolutionWidth"], height: params["resolutionHeight"]).id,
+                      resolution_id: Resolution.find_or_create_by(width: params["resolutionWidth"], height: params["resolutionHeight"]).id,
                       ip_id: Ip.find_or_create_by(address: params["ip"]).id,
                             )
     end
@@ -37,5 +37,37 @@ class SourceTest < Minitest::Test
     get "/sources/yahoo"
     
     assert_equal ["http://yahoo.com/weather", "http://yahoo.com/news"], Source.order_urls("yahoo")
+  end
+  
+  def test_it_can_find_its_user_agent_info
+    get "/sources/yahoo"
+    
+    assert_equal "Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17", Source.user_agent_info("yahoo").first
+  end
+  
+  def test_it_can_find_its_browser_info
+    skip
+    get "/sources/yahoo"
+    
+    assert_equal "Chrome/24.0.1309.0 Safari/537.17", Source.browser_info("yahoo").first
+  end
+  
+  def test_it_can_find_its_os_info
+    skip
+    get "/sources/yahoo"
+    
+    assert_equal "Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2)", Source.os_info("yahoo").first
+  end
+  
+  def test_it_can_find_its_resolution_height
+    get "/sources/yahoo"
+    
+    assert_equal ["600", "700", "600", "600", "600"], Source.screen_resolution_height("yahoo")
+  end
+  
+  def test_it_can_find_its_resolution_width
+    get "/sources/yahoo"
+    
+    assert_equal ["800", "500", "800", "800", "800"], Source.screen_resolution_width("yahoo")
   end
 end
