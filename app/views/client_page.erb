@@ -1,5 +1,21 @@
 <h1>Hello there</h1>
 
-<% @ordered_urls.each do |address| %>
- <h1><%= address %></h1>
- <% end %>
+<h2>Most Requested URLS</h2>
+<% @source.ordered_urls.each do |address| %>
+ <h3><%= address %></h3>
+<% end %>
+ 
+<h2>Each Browser</h2>
+<% @source.browser_info.each do |browser| %>
+ <h3><%= browser %></h3>
+<% end %>
+
+<h2>Each OS</h2>
+<% @source.os_info.each do |os| %>
+ <h3><%= os %></h3>
+<% end %>
+
+<h2>Each screen resolution</h2>
+<% @source.screen_resolution_width_height.each do |pair| %>
+ <h3><%= pair %></h3>
+<% end %>
