@@ -1,6 +1,3 @@
-
-# require_relative '../models/create_source'
-
 module TrafficSpy
   class Server < Sinatra::Base
     get '/' do
@@ -19,33 +16,35 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/data' do |identifier|
-      if !params.has_key?("payload")
+      if !params.include?("payload")
         missing_payload
-      elsif Source.where(identifier: identifier) == []
-        payload = new_payload(params)
-        parsed_payload = CreatePayload.new(payload)
-        status parsed_payload.missing_identifier_status
-        body parsed_payload.missing_identifier_body
-      else 
-        payload = new_payload(params)
-        parsed_payload = CreatePayload.new(payload)
-        status parsed_payload.status
-        body parsed_payload.body
+      else
+        parsed_params = JSON.parse(params["payload"])
+          if Source.where(identifier: identifier) == []
+            status 403
+            body "Identifier doesn't exist"
+          else 
+            payload = new_payload(parsed_params, identifier)
+            parsed_payload = CreatePayload.new(payload)
+            status parsed_payload.status
+            body parsed_payload.body
+          end
       end
     end
     
-    def new_payload(params)
-      Payload.new(url_id: Url.find_or_create_by(address: params["payload"]["url"]).id,
-                            requested_at: params["payload"]["requestedAt"],
-                            responded_in: params["payload"]["respondedIn"],
-                            referrer_id: Referrer.find_or_create_by(referrer_url: params["payload"]["referredBy"]).id,
-                            request_type_id: RequestType.find_or_create_by(verb_name: params["payload"]["requestType"]).id,
-                            parameters: params["payload"]["parameters"],
-                            event_id: Event.find_or_create_by(name: params["payload"]["eventName"]).id,
-                            user_agent_id: UserAgent.find_or_create_by(browser_info: params["payload"]["userAgent"]).id,
-                            resolution_size_id: Resolution.find_or_create_by(width: params["payload"]["resolutionWidth"], height: params["payload"]["resolutionHeight"]).id,
-                            ip_id: Ip.find_or_create_by(address: params["payload"]["ip"]).id,
-                            )
+    def new_payload(parsed_params, identifier)
+      Payload.new(source_id:       Source.find_by(identifier: identifier).id,
+                  url_id:          Url.find_or_create_by(address: parsed_params["url"]).id,
+                  requested_at:    parsed_params["requestedAt"],
+                  responded_in:    parsed_params["respondedIn"],
+                  referrer_id:     Referrer.find_or_create_by(referrer_url: parsed_params["referredBy"]).id,
+                  request_type_id: RequestType.find_or_create_by(verb_name: parsed_params["requestType"]).id,
+                  parameters:      parsed_params["parameters"],
+                  event_id:        Event.find_or_create_by(name: parsed_params["eventName"]).id,
+                  user_agent_id:   UserAgent.find_or_create_by(browser_info: parsed_params["userAgent"]).id,
+                  resolution_id:   Resolution.find_or_create_by(width: parsed_params["resolutionWidth"], height: parsed_params["resolutionHeight"]).id,
+                  ip_id:           Ip.find_or_create_by(address: parsed_params["ip"]).id,
+                  )
     end
     
     def missing_payload
@@ -55,6 +54,11 @@ module TrafficSpy
     
     get '/sources/:identifier' do |identifier|
       @ordered_urls = Source.order_urls(identifier)
+      # @browsers = Source.browser_info(identifier)
+      # @os = Source.os_info(identifier)
+      @resolution_heights = Source.screen_resolution_height(identifier)
+      @resolution_widths = Source.screen_resolution_width(identifier)
+      
       erb :client_page
     end
   end
