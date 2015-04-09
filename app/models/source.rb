@@ -29,5 +29,10 @@ module TrafficSpy
         "#{pl.resolution.width}X#{pl.resolution.height}"
       end
     end
+    
+    def ordered_url_response_times
+      response_times_ordered = payloads.sort_by { |pl| pl.url.average_response_time }.reverse
+      response_times_ordered.map { |pl| "#{pl.url.address}: #{pl.url.average_response_time}"}.uniq
+    end
   end
 end
