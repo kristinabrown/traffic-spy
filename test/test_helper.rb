@@ -1,4 +1,6 @@
 ENV["RACK_ENV"] ||= "test"
+require 'simplecov'
+SimpleCov.start
 
 require 'bundler'
 Bundler.require
@@ -19,7 +21,7 @@ class Minitest::Test
   def setup
     DatabaseCleaner.start
   end
-  
+
   def teardown
     DatabaseCleaner.clean
   end
@@ -27,7 +29,7 @@ end
 
 class TestData
   def self.clients
-    [  
+    [
       {"identifier" => "yahoo", "rootUrl" =>  "http://yahoo.com"},
       {"identifier" => "jumpstartlab", "rootUrl" =>  "http://jumpstartlab.com"},
       {"identifier" => "google", "rootUrl" =>  "http://google.com"},
@@ -38,7 +40,7 @@ class TestData
       {"identifier" => "facebook", "rootUrl" =>  "http://facebook.com"}
     ]
   end
-  
+
   def self.payloads
     [
       {"source_id" => "2", "url" => "http://jumpstartlab.com/blog","requestedAt" => "2013-02-16 21:38:28 -0700","respondedIn" => 37,"referredBy" => "http://jumpstartlab.com","requestType" => "GET","parameters" => [],"eventName" =>  "socialLogin","userAgent" => "Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17","resolutionWidth" => "1920","resolutionHeight" => "1280","ip" => "63.29.38.211"},
