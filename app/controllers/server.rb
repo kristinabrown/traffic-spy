@@ -52,5 +52,10 @@ module TrafficSpy
         status 400
         body "Missing payload"
     end
+    
+    get '/sources/:identifier' do |identifier|
+      @ordered_urls = Source.order_urls(identifier)
+      erb :client_page
+    end
   end
 end
