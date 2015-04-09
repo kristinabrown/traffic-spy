@@ -19,3 +19,12 @@
 <% @source.screen_resolution_width_height.each do |pair| %>
  <h3><%= pair %></h3>
 <% end %>
+
+<h2>URL response times in order of worst to best</h2>
+<% @source.ordered_response_times.each do |pair| %>
+ <h3><%= pair %></h3>
+<% end %>
+
+<!-- remember to create hyperlinks to each url
+to view url specific data, and a hyperlink
+to view events index -->
