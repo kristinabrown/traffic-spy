@@ -38,5 +38,9 @@ module TrafficSpy
     def ordered_events
       payloads.order('event_id').map { |pl| pl.event.name }.reverse.uniq
     end
+    
+    def each_event
+      payloads.map { |pl| pl.event.name }.uniq
+    end
   end
 end

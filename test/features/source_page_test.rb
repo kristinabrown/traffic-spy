@@ -1,6 +1,8 @@
-require './test/test_helper.rb'
+require './test/test_helper'
 
-class SourceTest < Minitest::Test
+class SourcePagetest < MiniTest::Test
+  include Capybara::DSL
+  
   def setup
     DatabaseCleaner.start
   
@@ -8,7 +10,7 @@ class SourceTest < Minitest::Test
 
     TestData.payloads.each do |params|
       TrafficSpy::Payload.create(source_id: params["source_id"], 
-                      url_id: TrafficSpy::Url.find_or_create_by(address: params["url"]).id,
+                      url_id: TrafficSpy::Url.find_or_create_by(address: params["url"], relative_path: URI(params["url"]).path).id,
                       requested_at: params["requestedAt"],
                       responded_in: params["respondedIn"],
                       referrer_id: TrafficSpy::Referrer.find_or_create_by(referrer_url: params["referredBy"]).id,
@@ -26,12 +28,16 @@ class SourceTest < Minitest::Test
     DatabaseCleaner.clean
   end
   
-  def test_it_can_show_hour_to_hour_breakdown
-    assert_equal ["Hour 0: had 1 event occurances.", "Hour 12: had 1 event occurances.", "Hour 21: had 4 event occurances."], @source.payloads.first.event.hour_breakdown  
+  def test_individual_source_page_links_to_sources_index
+    visit '/sources/yahoo'
+    
+    assert_equal '/sources/yahoo', current_path
+    assert page.has_content?("URLs")
+    
+    
+    click_link "Events Page"
+    
+    assert_equal '/sources/yahoo/events', current_path
+    assert page.has_content?("socialLogin")
   end
-  
-  def test_total_times_recieved
-    assert_equal 6, @source.payloads.first.event.number_of_times_receieved
-  end
-  
 end

@@ -9,7 +9,7 @@
 </ol>
 
 <ul>
-  <% @source.payloads.each do |pl| %>
-    <li><a href="/sources/<%= @source.identifier %>/events/<%= pl.event.name %>" ><%= pl.event.name %></a></li>
+  <% @source.each_event.each do |event| %>
+    <li><a href="/sources/<%= @source.identifier %>/events/<%= event %>" ><%= event %></a></li>
   <% end %>
 </ul>

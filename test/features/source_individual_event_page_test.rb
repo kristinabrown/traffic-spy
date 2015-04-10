@@ -1,6 +1,8 @@
-require './test/test_helper.rb'
+require './test/test_helper'
 
-class SourceTest < Minitest::Test
+class IndividualEventPagetest < MiniTest::Test
+  include Capybara::DSL
+  
   def setup
     DatabaseCleaner.start
   
@@ -26,12 +28,16 @@ class SourceTest < Minitest::Test
     DatabaseCleaner.clean
   end
   
-  def test_it_can_show_hour_to_hour_breakdown
-    assert_equal ["Hour 0: had 1 event occurances.", "Hour 12: had 1 event occurances.", "Hour 21: had 4 event occurances."], @source.payloads.first.event.hour_breakdown  
+  def test_individual_event_links_to_each_event
+    visit "/sources/yahoo/events/socialLogin"
+    
+    assert_equal '/sources/yahoo/events/socialLogin', current_path
+    assert page.has_content?("socialLogin")
+
+    
+    click_link "Back to events index"
+
+    assert_equal '/sources/yahoo/events', current_path
+    assert page.has_content?("socialLogin")
   end
-  
-  def test_total_times_recieved
-    assert_equal 6, @source.payloads.first.event.number_of_times_receieved
-  end
-  
 end
