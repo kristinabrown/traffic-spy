@@ -1,6 +1,12 @@
-require './test/test_helper.rb'
+require './test/test_helper'
 
-class SourceTest < Minitest::Test
+class ViewUrlSpecificDataTest < MiniTest::Test
+  include Rack::Test::Methods
+  
+  def app
+    TrafficSpy::Server
+  end
+  
   def setup
     DatabaseCleaner.start
   
@@ -26,32 +32,17 @@ class SourceTest < Minitest::Test
     DatabaseCleaner.clean
   end
   
-  def test_it_has_its_attributes
-    assert_equal "http://yahoo.com/weather", @source.payloads.first.url.address
-    assert_equal "/weather", @source.payloads.first.url.relative_path
+  def test_can_display_url_stats
+    get '/sources/yahoo/urls/weather'
+    
+    assert_equal 200, last_response.status
   end
+  #ask how to best test the get things for controllers
   
-  def test_it_can_find_its_average_response_time
-    assert_equal 91, @source.payloads.first.url.average_response_time
+  def test_can_display_error_message_when_url_doesnt_exist
+    get '/sources/yahoo/urls/comics'
+    
+    assert_equal 200, last_response.status
   end
-  
-  def test_it_can_find_its_longest_response_time
-    assert_equal 200, @source.payloads.first.url.longest_response_time
-  end
-  
-  def test_it_can_find_its_shortest_response_time
-    assert_equal 37, @source.payloads.first.url.shortest_response_time
-  end
-  
-  def test_it_can_find_which_HTTP_verbs_are_used
-    assert_equal ["GET", "GET", "GET"], @source.payloads.first.url.verbs
-  end
-  
-  def test_it_can_find_most_popular_referrers
-    assert_equal ["http://jumpstartlab.com:2", "http://apple.com:1"], @source.payloads.first.url.most_popular_referrers
-  end
-  
-  def test_it_can_find_most_popular_user_agents
-    assert_equal ["Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17: 2", "Mozilla/5.0 (Windows%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17: 1"], @source.payloads.first.url.most_popular_user_agents
-  end
-end
+end  
+
