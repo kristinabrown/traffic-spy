@@ -26,16 +26,14 @@ class SourceTest < Minitest::Test
     DatabaseCleaner.clean
   end
   
-  #   def test_source_assigns_correct_attributes
-  #     source = Source.create(identifier: "soemthing", root_url: "something else")
-  #     assert_equal "something", source.identifer
-  #     assert_equal "something else", source.root_url
-  #   end
-  #   
-  #   def test_source_has_payloads
-  #     # create source
-  #     assert_equal [], source.payloads
-  #   end
+  def test_source_assigns_correct_attributes
+    assert_equal "yahoo", @source.identifier
+    assert_equal "http://yahoo.com", @source.root_url
+  end
+  
+  def test_source_has_payloads
+    assert_equal 5, @source.payloads.count
+  end
   
   def test_it_can_find_its_most_requested_url
     assert_equal ["http://yahoo.com/weather", "http://yahoo.com/news"], @source.ordered_urls
@@ -59,5 +57,9 @@ class SourceTest < Minitest::Test
   
   def test_it_can_order_its_url_response_times
     assert_equal ["http://yahoo.com/news: 123", "http://yahoo.com/weather: 91"], @source.ordered_url_response_times
+  end
+  
+  def test_it_can_order_its_events
+    assert_equal ["beginRegistration", "socialLogin"], @source.ordered_events
   end
 end
