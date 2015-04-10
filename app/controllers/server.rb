@@ -50,5 +50,14 @@ module TrafficSpy
         erb :event
       end
     end
+    
+    get '/sources/:identifier/events' do |identifier|
+      @source = Source.find_by(identifier: identifier)
+      if @source.payloads == []
+        erb :events_error
+      else
+        erb :events
+      end
+    end
   end
 end

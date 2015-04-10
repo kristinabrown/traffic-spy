@@ -34,5 +34,9 @@ module TrafficSpy
       response_times_ordered = payloads.sort_by { |pl| pl.url.average_response_time }.reverse
       response_times_ordered.map { |pl| "#{pl.url.address}: #{pl.url.average_response_time}"}.uniq
     end
+    
+    def ordered_events
+      payloads.order('event_id').map { |pl| pl.event.name }.reverse.uniq
+    end
   end
 end

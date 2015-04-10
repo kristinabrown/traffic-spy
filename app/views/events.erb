@@ -1,0 +1,15 @@
+<h1><%= @source.identifier %></h1>
+
+<h2>Most Requested to Least Requested events:</h2>
+
+<ol>
+<% @source.ordered_events.each do |event| %>
+  <li><%= event %></li>
+<% end %>
+</ol>
+
+<ul>
+  <% @source.payloads.each do |pl| %>
+    <li><a href="/sources/<%= @source.identifier %>/events/<%= pl.event.name %>" ><%= pl.event.name %></a></li>
+  <% end %>
+</ul>

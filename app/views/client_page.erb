@@ -1,30 +1,45 @@
 <h1>Hello there</h1>
 
 <h2>Most Requested URLS</h2>
+<ul>
 <% @source.ordered_urls.each do |address| %>
- <h3><%= address %></h3>
+ <li><%= address %></li>
 <% end %>
+</ul>
  
 <h2>Each Browser</h2>
+<ul>
 <% @source.browser_info.each do |browser| %>
- <h3><%= browser %></h3>
+ <li><%= browser %></li>
 <% end %>
+</ul>
 
 <h2>Each OS</h2>
+<ul>
 <% @source.os_info.each do |os| %>
- <h3><%= os %></h3>
+ <li><%= os %></li>
 <% end %>
+</ul>
 
 <h2>Each screen resolution</h2>
+<ul>
 <% @source.screen_resolution_width_height.each do |pair| %>
- <h3><%= pair %></h3>
+ <li><%= pair %></li>
 <% end %>
+</ul>
 
 <h2>URL response times in order of worst to best</h2>
+<ul>
 <% @source.ordered_url_response_times.each do |pair| %>
- <h3><%= pair %></h3>
+ <li><%= pair %></li>
 <% end %>
+</ul>
 
-<!-- remember to create hyperlinks to each url
-to view url specific data, and a hyperlink
-to view events index -->
+<h2>URLs:</h2>
+<ul>
+<% @source.payloads.each do |pl| %>
+  <li><a href="/sources/<%= @source.identifier %>/urls<%= pl.url.relative_path %>"><%= pl.url.address %></a></li>
+<% end %>
+</ul>
+
+<a href="/sources/<%= @source.identifier %>/events">Events Page</a>
