@@ -1,0 +1,7 @@
+<h1>Source Index</h1>
+
+<ul>
+<% @sources.each do |source| %>
+  <li><a href="/sources/<%= source.identifier %>"><%=source.identifier  %></a></li>
+<% end  %>
+</ul>

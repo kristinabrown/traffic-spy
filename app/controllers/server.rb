@@ -13,6 +13,11 @@ module TrafficSpy
       status parsed_source.status
       body parsed_source.body
     end
+    
+    get '/sources' do 
+      @sources = Source.all
+      erb :source_index
+    end
 
     post '/sources/:identifier/data' do |identifier|
       parsed_payload = ParsePayload.new(params, identifier)
