@@ -1,6 +1,6 @@
 require './test/test_helper'
 
-class ViewUrlSpecificDataTest < MiniTest::Test
+class DisplaysEventDataTest < MiniTest::Test
   include Rack::Test::Methods
   
   def app
@@ -32,17 +32,16 @@ class ViewUrlSpecificDataTest < MiniTest::Test
     DatabaseCleaner.clean
   end
   
-  def test_can_display_url_stats
-    get '/sources/yahoo/urls/weather'
+  def test_can_display_events_data
+    get '/sources/yahoo/events/socialLogin'
     
     assert_equal 200, last_response.status
   end
   #ask how to best test the get things for controllers
   
-  def test_can_display_error_message_when_url_doesnt_exist
-    get '/sources/yahoo/urls/comics'
+  def test_can_display_error_message_when_event_doesnt_exist
+    get '/sources/yahoo/events/anything'
     
     assert_equal 200, last_response.status
   end
-end  
-
+end

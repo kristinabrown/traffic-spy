@@ -20,18 +20,35 @@ module TrafficSpy
       body parsed_payload.body
     end
     
+    #ask if we should pull these if/else things out
     get '/sources/:identifier' do |identifier|
       @source = Source.find_by(identifier: identifier)
-      
-      erb :client_page
+      if @source.nil?
+        erb :identifier_error
+      else
+        erb :client_page
+      end
     end
     
     get '/sources/:identifier/urls/:relative' do |identifier, relative|
-      byebug
-      @url = Source.find_by(identifier: identifier).payloads.where()
+      slash_relative = "/#{relative}"
+      @url = Url.find_by(relative_path: slash_relative)
       @identifier = identifier
-      
-      erb :url_info
+      if @url.nil?
+        erb :url_error
+      else
+        erb :url_info
+      end
+    end
+    
+    get '/sources/:identifier/events/:eventname' do |identifier, eventname|
+      @event = Event.find_by(name: eventname)
+      @identifier = identifier
+      if @event.nil?
+        erb :event_error
+      else
+        erb :event
+      end
     end
   end
 end

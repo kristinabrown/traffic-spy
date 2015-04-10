@@ -1,12 +1,6 @@
-require './test/test_helper'
+require './test/test_helper.rb'
 
-class ViewUrlSpecificDataTest < MiniTest::Test
-  include Rack::Test::Methods
-  
-  def app
-    TrafficSpy::Server
-  end
-  
+class SourceTest < Minitest::Test
   def setup
     DatabaseCleaner.start
   
@@ -14,7 +8,7 @@ class ViewUrlSpecificDataTest < MiniTest::Test
 
     TestData.payloads.each do |params|
       TrafficSpy::Payload.create(source_id: params["source_id"], 
-                      url_id: TrafficSpy::Url.find_or_create_by(address: params["url"], relative_path: URI(params["url"]).path).id,
+                      url_id: TrafficSpy::Url.find_or_create_by(address: params["url"]).id,
                       requested_at: params["requestedAt"],
                       responded_in: params["respondedIn"],
                       referrer_id: TrafficSpy::Referrer.find_or_create_by(referrer_url: params["referredBy"]).id,
@@ -32,17 +26,12 @@ class ViewUrlSpecificDataTest < MiniTest::Test
     DatabaseCleaner.clean
   end
   
-  def test_can_display_url_stats
-    get '/sources/yahoo/urls/weather'
-    
-    assert_equal 200, last_response.status
+  def test_it_can_show_hour_to_hour_breakdown
+    assert_equal ["0: 1", "12: 1", "21: 4"], @source.payloads.first.event.hour_breakdown  
   end
-  #ask how to best test the get things for controllers
   
-  def test_can_display_error_message_when_url_doesnt_exist
-    get '/sources/yahoo/urls/comics'
-    
-    assert_equal 200, last_response.status
+  def test_total_times_recieved
+    assert_equal 6, @source.payloads.first.event.number_of_times_receieved
   end
-end  
-
+  
+end

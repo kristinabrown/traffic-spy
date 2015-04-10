@@ -1,7 +1,21 @@
 <h1><%= @identifier %></h1>
 
-<% @source_payloads.each do |payload|  %>
-  <%= payload.url.longest_response_time %>
-  <%= payload.url.shortest_response_time %>
-  <%= payload.url. %>
-  <%= payload.url.longest_response_time %>
+<h3>Average Response Time</h3>
+<%= @url.average_response_time %><br>
+
+<h3>Longest Response Time</h3>
+<%= @url.longest_response_time %><br>
+
+<h3>Shortest Response Time</h3>
+<%= @url.shortest_response_time %><br>
+
+<h3>Verbs</h3>
+<%= @url.verbs %><br>
+
+<h3>Most Popular Referrers</h3>
+<%= @url.most_popular_referrers %><br>
+
+<h3>Most Popular Agents</h3>
+<%= @url.most_popular_user_agents %><br>
+
+  
