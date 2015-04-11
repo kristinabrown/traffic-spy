@@ -30,10 +30,9 @@ class EventsPagetest < MiniTest::Test
   
   def test_events_links_to_each_event
     visit '/sources/yahoo/events'
-    
     assert_equal '/sources/yahoo/events', current_path
     assert page.has_content?("yahoo")
-    
+
     click_link "socialLogin"
 
     assert_equal '/sources/yahoo/events/socialLogin', current_path
