@@ -8,13 +8,13 @@ module TrafficSpy
       erb :error
     end
 
-    post '/sources' do 
+    post '/sources' do
       parsed_source = ParseSource.new(params)
       status parsed_source.status
       body parsed_source.body
     end
-    
-    get '/sources' do 
+
+    get '/sources' do
       @sources = Source.all
       erb :source_index
     end
@@ -24,8 +24,7 @@ module TrafficSpy
       status parsed_payload.status
       body parsed_payload.body
     end
-    
-    #ask if we should pull these if/else things out
+
     get '/sources/:identifier' do |identifier|
       @source = Source.find_by(identifier: identifier)
       if @source.nil?
@@ -34,10 +33,9 @@ module TrafficSpy
         erb :client_page
       end
     end
-    
-    get '/sources/:identifier/urls/:relative' do |identifier, relative|
-      slash_relative = "/#{relative}"
-      @url = Url.find_by(relative_path: slash_relative)
+
+    get '/sources/:identifier/urls/:relative' do |identifier,relative|
+      @url = Url.find_by(relative_path: add_slash(relative))
       @identifier = identifier
       if @url.nil?
         erb :url_error
@@ -45,8 +43,8 @@ module TrafficSpy
         erb :url_info
       end
     end
-    
-    get '/sources/:identifier/events/:eventname' do |identifier, eventname|
+
+    get '/sources/:identifier/events/:eventname' do |identifier,eventname|
       @event = Event.find_by(name: eventname)
       @identifier = identifier
       if @event.nil?
@@ -55,7 +53,7 @@ module TrafficSpy
         erb :event
       end
     end
-    
+
     get '/sources/:identifier/events' do |identifier|
       @source = Source.find_by(identifier: identifier)
       if @source.payloads == []
@@ -63,6 +61,12 @@ module TrafficSpy
       else
         erb :events
       end
+    end
+
+    private
+
+    def add_slash(relative)
+      "/#{relative}"
     end
   end
 end

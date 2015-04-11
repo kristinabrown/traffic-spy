@@ -1,9 +1,10 @@
 module TrafficSpy
-  class ParseSource #< ActiveRecord::Base
+  class ParseSource
     def initialize(params)
-      @source = Source.new(identifier: params["identifier"], root_url: params["rootUrl"])
+      @source = Source.new(identifier: params["identifier"],
+                           root_url:   params["rootUrl"])
     end
-    
+
     def status
       if @source[:identifier] == nil || @source[:root_url] == nil
         400
@@ -13,7 +14,7 @@ module TrafficSpy
         403
       end
     end
-    
+
     def body
       if @source.save
         "{'identifier':'#{@source[:identifier]}'}"
