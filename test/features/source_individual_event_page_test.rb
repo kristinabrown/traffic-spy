@@ -1,6 +1,6 @@
 require './test/test_helper'
 
-class IndividualEventPagetest < MiniTest::Test
+class IndividualEventPageTest < MiniTest::Test
   include Capybara::DSL
   
   def setup
