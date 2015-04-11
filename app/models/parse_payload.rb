@@ -9,20 +9,7 @@ module TrafficSpy
       if !@params.include?("payload")
         400
       else
-        parsed_params = JSON.parse(@params["payload"])
-        if Source.where(identifier: @identifier) == []
-          403
-        else
-        payload = new_payload(parsed_params, @identifier)
-          if Payload.where(url_id:        payload.url_id,
-                           requested_at:  payload.requested_at,
-                           user_agent_id: payload.user_agent_id) == []
-            payload.save
-            200
-          else
-            403
-          end
-        end
+        parse_and_check_indentifier_for_status
       end
     end
 
@@ -30,21 +17,11 @@ module TrafficSpy
       if !@params.include?("payload")
         "Missing payload"
       else
-        parsed_params = JSON.parse(@params["payload"])
-        if Source.where(identifier: @identifier) == []
-          "Identifier doesn't exist"
-        else
-        payload = new_payload(parsed_params, @identifier)
-          if  Payload.where(url_id: payload.url_id,
-                            requested_at: payload.requested_at,
-                            user_agent_id: payload.user_agent_id) == []
-            "success"
-          else
-            "Duplicate payload request"
-          end
-        end
+        parse_and_check_indentifier_for_boody
       end
     end
+
+    private
 
     def new_payload(parsed_params, identifier)
       Payload.new(
@@ -60,6 +37,49 @@ module TrafficSpy
       resolution_id: Resolution.find_or_create_by(width: parsed_params["resolutionWidth"], height: parsed_params["resolutionHeight"]).id,
       ip_id: Ip.find_or_create_by(address: parsed_params["ip"]).id,
       )
+    end
+
+    def parsed_json_params
+      JSON.parse(@params["payload"])
+    end
+
+    def parse_and_check_indentifier_for_status
+      parsed_params = parsed_json_params
+      if Source.where(identifier: @identifier) == []
+        403
+      else
+        create_payload_and_check_if_repeated_status(parsed_params)
+      end
+    end
+
+    def create_payload_and_check_if_repeated_status(parsed_params)
+      pl = new_payload(parsed_params, @identifier)
+      if Payload.where(url_id: pl.url_id, requested_at: pl.requested_at,
+                      user_agent_id: pl.user_agent_id) == []
+        pl.save
+        200
+      else
+        403
+      end
+    end
+
+    def parse_and_check_indentifier_for_boody
+      parsed_params = parsed_json_params
+      if Source.where(identifier: @identifier) == []
+        "Identifier doesn't exist"
+      else
+        create_payload_and_check_if_repeated_body(parsed_params)
+      end
+    end
+
+    def create_payload_and_check_if_repeated_body(parsed_params)
+      pl = new_payload(parsed_params, @identifier)
+      if  Payload.where(url_id: pl.url_id, requested_at: pl.requested_at,
+                        user_agent_id: pl.user_agent_id) == []
+        "success"
+      else
+        "Duplicate payload request"
+      end
     end
   end
 end
