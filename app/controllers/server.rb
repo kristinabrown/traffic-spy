@@ -53,7 +53,7 @@ module TrafficSpy
       if @event.nil?
         erb :event_error
       else
-        erb :event
+        erb :individual_event
       end
     end
 

@@ -1,11 +1,7 @@
 <h1>Hello there</h1>
 
 <h2>Most Requested URLS</h2>
-<ul>
-<% @source.ordered_urls.each do |address| %>
- <li><%= address %></li>
-<% end %>
-</ul>
+<%= partial(:'partials/url', collection: @urls) %>
  
 <h2>Each Browser</h2>
 <ul>

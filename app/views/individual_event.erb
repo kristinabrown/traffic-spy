@@ -1,0 +1,15 @@
+<h1><%= @identifier %></h1>
+
+<%= @event.name %>
+
+<h2>Number of occurances per hour:</h2>
+<ul>
+<% @event.hour_breakdown.each do |hour| %>
+  <li><%= hour %></li><br>
+<% end %>
+</ul>
+
+<h2>Total Times Event <%= @event.name %> was Received</h2>
+<%= @event.number_of_times_receieved %><br>
+
+<a href="/sources/<%= @identifier %>/events">Back to events index</a>

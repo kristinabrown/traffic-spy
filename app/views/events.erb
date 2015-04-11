@@ -2,11 +2,7 @@
 
 <h2>Most Requested to Least Requested events:</h2>
 
-<ol>
-<% @source.ordered_events.each do |event| %>
-  <li><%= event %></li>
-<% end %>
-</ol>
+<%= partial(:'partials/event', collection: @events) %>
 
 <ul>
   <% @source.unique_events.each do |event| %>
