@@ -1,6 +1,6 @@
 require './test/test_helper.rb'
 
-class EventTest < Minitest::Test
+class UserAgentTest < Minitest::Test
   def setup
     DatabaseCleaner.start
   
@@ -26,20 +26,11 @@ class EventTest < Minitest::Test
     DatabaseCleaner.clean
   end
   
-  def test_event_assigns_correct_attributes
-    assert_equal "socialLogin", @source.payloads.first.event.name
+  def test_user_agent_assigns_correct_attributes
+    assert_equal "Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17", @source.payloads.first.user_agent.browser_info
   end
   
-  def test_event_has_payloads
-    assert_equal 6, @source.payloads.first.event.payloads.count
+  def test_user_agent_has_payloads
+    assert_equal 5, @source.payloads.first.user_agent.payloads.count
   end
-  
-  def test_it_can_show_hour_to_hour_breakdown
-    assert_equal ["Hour 0: had 1 event occurances.", "Hour 12: had 1 event occurances.", "Hour 21: had 4 event occurances."], @source.payloads.first.event.hour_breakdown  
-  end
-  
-  def test_total_times_recieved
-    assert_equal 6, @source.payloads.first.event.number_of_times_receieved
-  end
-  
 end

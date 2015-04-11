@@ -1,6 +1,6 @@
 require './test/test_helper.rb'
 
-class EventTest < Minitest::Test
+class ResolutionTest < Minitest::Test
   def setup
     DatabaseCleaner.start
   
@@ -26,20 +26,12 @@ class EventTest < Minitest::Test
     DatabaseCleaner.clean
   end
   
-  def test_event_assigns_correct_attributes
-    assert_equal "socialLogin", @source.payloads.first.event.name
+  def test_resolution_assigns_correct_attributes
+    assert_equal "600", @source.payloads.first.resolution.height
+    assert_equal "800", @source.payloads.first.resolution.width
   end
   
-  def test_event_has_payloads
-    assert_equal 6, @source.payloads.first.event.payloads.count
+  def test_resolution_has_payloads
+    assert_equal 4, @source.payloads.first.resolution.payloads.count
   end
-  
-  def test_it_can_show_hour_to_hour_breakdown
-    assert_equal ["Hour 0: had 1 event occurances.", "Hour 12: had 1 event occurances.", "Hour 21: had 4 event occurances."], @source.payloads.first.event.hour_breakdown  
-  end
-  
-  def test_total_times_recieved
-    assert_equal 6, @source.payloads.first.event.number_of_times_receieved
-  end
-  
 end

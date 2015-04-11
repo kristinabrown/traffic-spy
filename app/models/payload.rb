@@ -2,7 +2,7 @@ module TrafficSpy
   class Payload < ActiveRecord::Base
     validates_presence_of :url_id, :requested_at, :responded_in,
                           :referrer_id, :request_type_id, :event_id,
-                          :user_agent_id, :resolution_id, :ip_id
+                          :user_agent_id, :resolution_id, :ip_id, :source_id
     belongs_to :source
     belongs_to :url
     belongs_to :referrer
