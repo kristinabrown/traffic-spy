@@ -37,8 +37,8 @@
 
 <h2>URLs:</h2>
 <ul>
-<% @source.payloads.each do |pl| %>
-  <li><a href="/sources/<%= @source.identifier %>/urls<%= pl.url.relative_path %>"><%= pl.url.address %></a></li>
+<% @source.unique_urls.each do |url| %>
+  <li><a href="/sources/<%= @source.identifier %>/urls<%= url.relative_path %>"><%= url.address %></a></li>
 <% end %>
 </ul>
 

@@ -62,4 +62,12 @@ class SourceTest < Minitest::Test
   def test_it_can_order_its_events
     assert_equal ["beginRegistration", "socialLogin"], @source.ordered_events
   end
+  
+  def test_it_can_list_unique_events
+    assert_equal ["socialLogin", "beginRegistration"], @source.unique_events
+  end
+  
+  def test_it_can_list_unique_urls
+    assert_equal 2, @source.unique_urls.count
+  end
 end

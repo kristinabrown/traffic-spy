@@ -9,7 +9,7 @@
 </ol>
 
 <ul>
-  <% @source.each_event.each do |event| %>
+  <% @source.unique_events.each do |event| %>
     <li><a href="/sources/<%= @source.identifier %>/events/<%= event %>" ><%= event %></a></li>
   <% end %>
 </ul>
