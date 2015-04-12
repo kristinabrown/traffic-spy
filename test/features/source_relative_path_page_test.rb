@@ -2,14 +2,14 @@ require './test/test_helper'
 
 class IndividualEventPagetest < MiniTest::Test
   include Capybara::DSL
-  
+
   def setup
     DatabaseCleaner.start
-  
+
     @source = TrafficSpy::Source.create(identifier: "yahoo", root_url: "http://yahoo.com")
 
     TestData.payloads.each do |params|
-      TrafficSpy::Payload.create(source_id: params["source_id"], 
+      TrafficSpy::Payload.create(source_id: params["source_id"],
                       url_id: TrafficSpy::Url.find_or_create_by(address: params["url"]).id,
                       requested_at: params["requestedAt"],
                       responded_in: params["respondedIn"],
@@ -23,21 +23,27 @@ class IndividualEventPagetest < MiniTest::Test
                             )
     end
   end
-  
+
   def teardown
     DatabaseCleaner.clean
   end
-  
+
   def test_individual_event_links_to_each_event
     visit "/sources/yahoo/events/socialLogin"
-    
+
     assert_equal '/sources/yahoo/events/socialLogin', current_path
     assert page.has_content?("socialLogin")
 
-    
+
     click_link "Back to events index"
 
     assert_equal '/sources/yahoo/events', current_path
     assert page.has_content?("socialLogin")
   end
+
+  def test_undefined_relative_path_error_page
+    visit '/sources/yahoo/urls/mail'
+    assert page.has_content?("That URL does not exist")
+  end
+
 end
