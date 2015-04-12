@@ -7,6 +7,10 @@ class EventsPagetest < MiniTest::Test
     DatabaseCleaner.start
 
     @source = TrafficSpy::Source.create(identifier: "yahoo", root_url: "http://yahoo.com")
+    TrafficSpy::Source.create(identifier: "turing", root_url: "http://turing.com")
+    TrafficSpy::Source.create(identifier: "apple", root_url: "http://apple.com")
+    TrafficSpy::Source.create(identifier: "microsoft", root_url: "http://microsoft.com")
+    
 
     TestData.payloads.each do |params|
       TrafficSpy::Payload.create(source_id: params["source_id"],
@@ -46,8 +50,8 @@ class EventsPagetest < MiniTest::Test
 
 
   def test_source_without_payload_error
-    skip
-    visit '/sources/turing/events'
+    TrafficSpy::Source.create(identifier: "palantir", root_url: "http://palantir.com")
+    visit '/sources/palantir/events'
     assert page.has_content?("No events have been defined!")
   end
 end
