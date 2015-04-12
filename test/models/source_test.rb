@@ -55,4 +55,12 @@ class SourceTest < Minitest::Test
   def test_it_can_list_unique_urls
     assert_equal 2, @source.unique_urls.count
   end
+  
+  def test_it_can_show_hour_to_hour_breakdown
+    assert_equal ["Hour 12: had 1 event occurances.", "Hour 21: had 1 event occurances."], @source.count_event_per_hour(@source.payloads.first.event)
+  end
+  
+  def test_total_times_recieved
+    assert_equal 2, @source.number_of_times_event_receieved(@source.payloads.first.event)
+  end
 end

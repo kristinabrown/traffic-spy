@@ -49,7 +49,7 @@ module TrafficSpy
 
     get '/sources/:identifier/events/:eventname' do |identifier,eventname|
       @event = Event.find_by(name: eventname)
-      @identifier = identifier
+      @source = Source.find_by(identifier: identifier)
       if @event.nil?
         erb :event_error
       else
