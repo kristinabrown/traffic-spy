@@ -2,14 +2,14 @@ require './test/test_helper'
 
 class EventsPagetest < MiniTest::Test
   include Capybara::DSL
-  
+
   def setup
     DatabaseCleaner.start
-  
+
     @source = TrafficSpy::Source.create(identifier: "yahoo", root_url: "http://yahoo.com")
 
     TestData.payloads.each do |params|
-      TrafficSpy::Payload.create(source_id: params["source_id"], 
+      TrafficSpy::Payload.create(source_id: params["source_id"],
                       url_id: TrafficSpy::Url.find_or_create_by(address: params["url"]).id,
                       requested_at: params["requestedAt"],
                       responded_in: params["respondedIn"],
@@ -23,11 +23,11 @@ class EventsPagetest < MiniTest::Test
                             )
     end
   end
-  
+
   def teardown
     DatabaseCleaner.clean
   end
-  
+
   def test_events_links_to_each_event
     visit '/sources/yahoo/events'
     assert_equal '/sources/yahoo/events', current_path
@@ -37,5 +37,17 @@ class EventsPagetest < MiniTest::Test
 
     assert_equal '/sources/yahoo/events/socialLogin', current_path
     assert page.has_content?("socialLogin")
+  end
+
+  def test_missing_event_error_page
+    visit '/sources/yahoo/events/abc'
+    assert page.has_content?("That event doesn't exist!")
+  end
+
+
+  def test_source_without_payload_error
+    skip
+    visit '/sources/turing/events'
+    assert page.has_content?("No events have been defined!")
   end
 end

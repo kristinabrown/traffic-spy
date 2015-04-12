@@ -2,14 +2,14 @@ require './test/test_helper'
 
 class SourceIndexPagetest < MiniTest::Test
   include Capybara::DSL
-  
+
   def setup
     DatabaseCleaner.start
-  
+
     @source = TrafficSpy::Source.create(identifier: "yahoo", root_url: "http://yahoo.com")
 
     TestData.payloads.each do |params|
-      TrafficSpy::Payload.create(source_id: params["source_id"], 
+      TrafficSpy::Payload.create(source_id: params["source_id"],
                       url_id: TrafficSpy::Url.find_or_create_by(address: params["url"]).id,
                       requested_at: params["requestedAt"],
                       responded_in: params["respondedIn"],
@@ -23,20 +23,25 @@ class SourceIndexPagetest < MiniTest::Test
                             )
     end
   end
-  
+
   def teardown
     DatabaseCleaner.clean
   end
-  
+
   def test_events_links_to_each_event
     visit '/sources/yahoo/events'
-    
+
     assert_equal '/sources/yahoo/events', current_path
     assert page.has_content?("yahoo")
-    
+
     click_link "socialLogin"
 
     assert_equal '/sources/yahoo/events/socialLogin', current_path
     assert page.has_content?("socialLogin")
+  end
+
+  def test_missing_identifier_error_page
+    visit '/sources/abc'
+    assert page.has_content?("That Identifier Doesn't Exist")
   end
 end
