@@ -33,13 +33,4 @@ class EventTest < Minitest::Test
   def test_event_has_payloads
     assert_equal 6, @source.payloads.first.event.payloads.count
   end
-  
-  def test_it_can_show_hour_to_hour_breakdown
-    assert_equal ["Hour 0: had 1 event occurances.", "Hour 12: had 1 event occurances.", "Hour 21: had 4 event occurances."], @source.payloads.first.event.hour_breakdown  
-  end
-  
-  def test_total_times_recieved
-    assert_equal 6, @source.payloads.first.event.number_of_times_receieved
-  end
-  
 end

@@ -47,6 +47,21 @@ module TrafficSpy
     def unique_urls
       payloads.map { |pl| pl.url }.uniq
     end
+    
+    def events_grouped_by_hour(event)
+      payloads.where(event_id: event.id).group_by { |pl| Time.parse(pl.requested_at).hour }
+    end
+    
+    def count_event_per_hour(event)
+      sorted = events_grouped_by_hour(event).sort_by { |k,v| k }
+      sorted.flat_map do |element|
+        "Hour #{element[0]}: had #{element[1].count} event occurances."
+      end
+    end
+
+    def number_of_times_event_receieved(event)
+      payloads.where(event_id: event.id).count
+    end
 
     private
 
