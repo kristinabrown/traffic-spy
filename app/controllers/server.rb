@@ -24,8 +24,8 @@ module TrafficSpy
 
     post '/sources/:identifier/data' do |identifier|
       parsed_payload = ParsePayload.new(params, identifier)
-      status parsed_payload.status
       body parsed_payload.body
+      status parsed_payload.status
     end
 
     get '/sources/:identifier' do |identifier|
