@@ -1,11 +1,13 @@
 <h1><%= @source.identifier %></h1>
 
-<h2>Most Requested to Least Requested events:</h2>
+<h2>Most Requested to Least Requested Events:</h2>
 
-<%= partial(:'partials/event', collection: @events) %>
+<!-- <%= partial(:'partials/event', collection: @events) %> -->
 
-<ul>
+<div class="list">
+<ol>
   <% @source.unique_events.each do |event| %>
     <li><a href="/sources/<%= @source.identifier %>/events/<%= event %>" ><%= event %></a></li>
   <% end %>
-</ul>
+</ol>
+</div>

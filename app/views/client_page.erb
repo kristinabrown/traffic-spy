@@ -1,41 +1,44 @@
-<h1>Hello there</h1>
+<h1>Hello There!</h1>
+<div id="secondary-header">
+  <a href="/sources/<%= @source.identifier %>/events">Events Page</a>
+</div>
 
-<h2>Most Requested URLS</h2>
-<%= partial(:'partials/url', collection: @urls) %>
- 
+<h2 >Most Requested URLS</h2>
+<div class="list">
+  <%= partial(:'partials/url', collection: @urls) %>
+</div>
+
 <h2>Each Browser</h2>
-<ul>
+<ul class="list">
 <% @source.browser_info.each do |browser| %>
  <li><%= browser %></li>
 <% end %>
 </ul>
 
 <h2>Each OS</h2>
-<ul>
+<ul class="list">
 <% @source.os_info.each do |os| %>
  <li><%= os %></li>
 <% end %>
 </ul>
 
 <h2>Each screen resolution</h2>
-<ul>
+<ul class="list">
 <% @source.screen_resolution_width_height.each do |pair| %>
  <li><%= pair %></li>
 <% end %>
 </ul>
 
 <h2>URL response times in order of worst to best</h2>
-<ul>
+<ul class="list">
 <% @source.ordered_url_response_times.each do |pair| %>
  <li><%= pair %></li>
 <% end %>
 </ul>
 
 <h2>URLs:</h2>
-<ul>
+<ul class="list">
 <% @source.unique_urls.each do |url| %>
   <li><a href="/sources/<%= @source.identifier %>/urls<%= url.relative_path %>"><%= url.address %></a></li>
 <% end %>
 </ul>
-
-<a href="/sources/<%= @source.identifier %>/events">Events Page</a>
