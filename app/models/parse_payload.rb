@@ -6,7 +6,7 @@ module TrafficSpy
     end
 
     def status
-      if !@params.include?("payload")
+      if !@params.include?("payload") || @params["payload"] == "{}"
         400
       else
         parse_and_check_indentifier_for_status
@@ -14,7 +14,7 @@ module TrafficSpy
     end
 
     def body
-      if !@params.include?("payload")
+      if !@params.include?("payload") || @params["payload"] == "{}"
         "Missing payload"
       else
         parse_and_check_indentifier_for_boody
