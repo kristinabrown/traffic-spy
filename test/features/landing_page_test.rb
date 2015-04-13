@@ -9,8 +9,8 @@ class LandingPagetest < MiniTest::Test
     assert_equal '/', current_path
     assert page.has_content?("Hello")
     
-    click_link "Sources Index"
-    
+    click_link "Sources List"
+
     assert_equal '/sources', current_path
     assert page.has_content?("Source Index")
   end

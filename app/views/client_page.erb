@@ -1,4 +1,5 @@
-<h1>Hello There!</h1>
+<div class="">
+<h1 class="bold"><%= @source.identifier %></h1>
 <div id="secondary-header">
   <a href="/sources/<%= @source.identifier %>/events">Events Page</a>
 </div>
@@ -42,3 +43,4 @@
   <li><a href="/sources/<%= @source.identifier %>/urls<%= url.relative_path %>"><%= url.address %></a></li>
 <% end %>
 </ul>
+</div>
