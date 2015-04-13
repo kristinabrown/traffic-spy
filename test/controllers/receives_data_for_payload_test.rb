@@ -11,6 +11,10 @@ class ReceivesPayloadDataTest < MiniTest::Test
     {"url"=>"http://jumpstartlab.com/blog", "requestedAt"=>"2013-02-16 21:38:28 -0700", "respondedIn"=>37, "referredBy"=>"http://jumpstartlab.com", "requestType"=>"GET", "parameters"=>[], "eventName"=>"socialLogin", "userAgent"=>"Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17", "resolutionWidth"=>"1920", "resolutionHeight"=>"1280", "ip"=>"63.29.38.211"}
   end
   
+  def empty_sample_data
+    {}
+  end
+  
   def sample_payload
     {"payload" => sample_data.to_json}
   end
@@ -32,7 +36,7 @@ class ReceivesPayloadDataTest < MiniTest::Test
   
   def test_missing_payload_empty_hash_gives_400_error
     original_count = TrafficSpy::Payload.count
-    post '/sources/:identifier/data', {}
+    post '/sources/:identifier/data', {"payload" => {}.to_json }
   
     assert_equal original_count, TrafficSpy::Payload.count
   
