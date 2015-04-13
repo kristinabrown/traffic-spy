@@ -1,15 +1,24 @@
 <h1><%= @source.identifier %></h1>
 
-<%= @event.name %>
+<div id="secondary-header">
+  <%= @event.name %>
+</div>
 
-<h2>Number of occurances per hour:</h2>
-<ul>
-<% @source.count_event_per_hour(@event).each do |hour| %>
-  <li><%= hour %></li><br>
-<% end %>
-</ul>
+<h2>Occurances By Hour:</h2>
 
-<h2>Total Times Event <%= @event.name %> was Received</h2>
-<%= @source.number_of_times_event_receieved(@event) %><br>
+<div class="list">
+  <ul>
+  <% @source.count_event_per_hour(@event).each do |hour| %>
+    <li><%= hour %></li><br>
+  <% end %>
+  </ul>
+</div>
 
-<a href="/sources/<%= @source.identifier %>/events">Back to events index</a>
+<h2>Times <%= @event.name %> <br>was Received:</h2>
+<div class="list">
+  <%= @source.number_of_times_event_receieved(@event) %><br>
+</div>
+
+<div id="secondary-header">
+  <a href="/sources/<%= @source.identifier %>/events">Back to events index</a>
+</div>
