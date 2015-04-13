@@ -3,6 +3,17 @@
   font-size: 76px;
 }
 
+div.transbox {
+    margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.8;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+    border-radius: 25px;
+    font-weight: bold;
+    padding: 10px;
+}
+
 #secondary-header{
   font-size: 30px;
 }
